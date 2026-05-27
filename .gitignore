@@ -1,0 +1,18 @@
+# Dev/scratch scripts
+*.py
+*.ps1
+*.txt
+*.log
+*.png
+*.jpg
+
+# Test files
+index_test.html
+chrome-profile-test3/
+
+# Node
+package.json
+node_modules/
+
+# Keep only the game
+!index.html
