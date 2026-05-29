@@ -798,6 +798,57 @@
         let particles = [];
         let screenShake = 0;
 
+        // --- CHAPTER STATE MANAGER ---
+        let ticketCount = 300;
+        let completionRate = 0;
+        let tatHours = 24.0;
+        let ocrProgress = 0;
+
+        // Chapter 1 Contra variables
+        let spreadGunActive = false;
+        let capsuleX = 960;
+        let capsuleY = 160;
+        let capsuleActive = true;
+        let capsuleDestroyed = false;
+        let spreadBadgeX = -100;
+        let spreadBadgeY = 380;
+        let spreadBadgeCollected = false;
+        let contraJumpingTeam = []; 
+
+        // Chapter 3 Splinter Cell variables
+        let spotlights = [
+            { id: 1, x: 280, y: 60, active: true, radius: 110 },
+            { id: 2, x: 620, y: 60, active: true, radius: 125 }
+        ];
+        let stealthMeter = 20; 
+        let spotlightShots = 0;
+        let stealthRollFrame = 0;
+        let stealthRolling = false;
+        let abhishekStealthX = 160;
+
+        const chapterDialogues = [
+            {
+                name: "Abhishek",
+                text: "Team LJMU & LBS: Thank you for keeping learner satisfaction high! Blasting support tickets down from 300 to 3 was key to sustaining our 85% CSAT. Outstanding work, everyone! 🎫🎯"
+            },
+            {
+                name: "Abhishek",
+                text: "Team Delivery: Thank you for your flawless program governance! Maintaining a consistent 90%+ completion rate for our concurrent programmes is a stellar milestone. You keep our pipeline running! 📈🚀"
+            },
+            {
+                name: "Abhishek",
+                text: "Team Grading: Thank you for the rapid turnaround! Resolving query tickets in under 24 hours turnaround time keeps our active learners motivated and operations lightning fast! ⏰⚡"
+            },
+            {
+                name: "Abhishek",
+                text: "To my lunch buddies: Prerna, Balneet, Umer, Krishika, and Darpan - thank you for the laughs, the endless office gossips, and making our daily lunches the absolute highlight of my day! 🍛💬"
+            },
+            {
+                name: "Abhishek",
+                text: "Ravi, thank you for being a fun and always supportive manager! Your backing allowed us to engineer the AI OCR tool for automated ID verification, saving 80+ operational hours! 🤖⚡"
+            }
+        ];
+
         // Init floating tech grid stars
         for (let i = 0; i < 40; i++) {
                     stars.push({
