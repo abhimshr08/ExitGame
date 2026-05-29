@@ -427,13 +427,33 @@
             position: absolute;
             right: 40px;
             bottom: 35px;
-            z-index: 18;
+            z-index: 50;
             font-family: 'Press Start 2P', monospace;
             font-size: 0.75rem;
             padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 0 15px var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(16,185,129,0.3);
+            animation: pulsebtn 1.2s ease-in-out infinite;
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            border: 2px solid #34d399;
         }
+        @keyframes pulsebtn {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--accent-glow); }
+            50% { transform: scale(1.07); box-shadow: 0 0 30px rgba(16,185,129,0.8); }
+        }
+        #continue-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.72rem;
+            font-family: 'Press Start 2P', monospace;
+            z-index: 50;
+            pointer-events: none;
+            animation: blink 1s steps(1) infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
@@ -463,7 +483,8 @@
         <canvas id="game-canvas" width="960" height="540"></canvas>
 
         <!-- Next Chapter Trigger -->
-        <button id="btn-next-chapter" class="btn btn-secondary hidden" onclick="triggerNextChapter()">Next Chapter 🚀</button>
+        <button id="btn-next-chapter" class="btn hidden" onclick="triggerNextChapter()">Next Chapter &#x1F680;</button>
+        <div id="continue-hint" class="hidden">CLICK or PRESS SPACE to continue</div>
 
         <!-- SCREEN 1: Main Menu -->
         <div id="menu-screen" class="overlay">
@@ -1478,11 +1499,25 @@
         function triggerDialogueBubble() {
             const data = chapterDialogues[currentChapter - 1];
             activeDialogueText = data.text;
-            document.getElementById('btn-next-chapter').classList.remove('hidden');
+            const btn = document.getElementById('btn-next-chapter');
+            btn.classList.remove('hidden');
+            const hint = document.getElementById('continue-hint');
+            if (hint) hint.classList.remove('hidden');
+            // Auto-advance after 5 seconds so game never gets stuck
+            if (window._autoAdvTimer) clearTimeout(window._autoAdvTimer);
+            window._autoAdvTimer = setTimeout(() => {
+                if (activeDialogueText !== null && currentChapter >= 1 && currentChapter <= 5) {
+                    triggerNextChapter();
+                }
+            }, 5000);
         }
 
         function triggerNextChapter() {
+            if (window._autoAdvTimer) { clearTimeout(window._autoAdvTimer); window._autoAdvTimer = null; }
             activeDialogueText = null;
+            document.getElementById('btn-next-chapter').classList.add('hidden');
+            const hint = document.getElementById('continue-hint');
+            if (hint) hint.classList.add('hidden');
             if (currentChapter < 5) {
                 loadChapter(currentChapter + 1);
             } else {
@@ -1493,8 +1528,15 @@
             }
         }
 
+        // Click anywhere on canvas also advances
+        document.getElementById('game-canvas').addEventListener('click', () => {
+            if (activeDialogueText !== null && currentChapter >= 1 && currentChapter <= 5) {
+                triggerNextChapter();
+            }
+        });
+
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+            if (e.code === 'Space' || e.code === 'Enter') {
                 if (currentChapter >= 1 && currentChapter <= 5) {
                     if (activeDialogueText !== null) {
                         triggerNextChapter();
