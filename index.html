@@ -1430,6 +1430,46 @@
                 ctx.fillRect(9, 0, 5, 8); ctx.strokeRect(9, 0, 5, 8);
                 ctx.fillRect(27, 0, 5, 8); ctx.strokeRect(27, 0, 5, 8);
             } else if (isSitting && pose === 'typing') {
+                // Office Chair under Abhishek
+                ctx.fillStyle = '#1e293b'; 
+                ctx.fillRect(3, 26, 7, 36);
+                ctx.strokeRect(3, 26, 7, 36);
+                ctx.fillStyle = '#0f172a'; 
+                ctx.fillRect(6, 62, 14, 4);
+                ctx.strokeRect(6, 62, 14, 4);
+                ctx.fillRect(11, 66, 4, 14); 
+                ctx.strokeRect(11, 66, 4, 14); 
+                ctx.fillRect(8, 80, 10, 3); 
+                ctx.strokeRect(8, 80, 10, 3); 
+
+                // Computer Desk
+                ctx.fillStyle = '#334155'; 
+                ctx.fillRect(34, 58, 28, 5);
+                ctx.strokeRect(34, 58, 28, 5);
+                ctx.fillRect(46, 63, 4, 19); 
+                ctx.strokeRect(46, 63, 4, 19); 
+                ctx.fillRect(38, 82, 20, 2);
+
+                // Holographic Screen / Monitor
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.15)'; 
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(42, 52);
+                ctx.lineTo(46, 22);
+                ctx.lineTo(62, 22);
+                ctx.lineTo(58, 52);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Animated coding lines on monitor
+                ctx.fillStyle = '#38bdf8';
+                for (let line = 0; line < 4; line++) {
+                    const lineW = 4 + (Math.sin(frame * 0.15 + line) * 0.5 + 0.5) * 6;
+                    ctx.fillRect(47 + line * 0.8, 28 + line * 5, lineW, 2);
+                }
+
                 // Typing hands (for Chapter 5 terminal coding)
                 const hs = frame * 0.22;
                 const h1x = 36 + Math.sin(hs) * 4, h1y = 52 + Math.cos(hs * 1.2) * 2;
@@ -1463,16 +1503,23 @@
             // ── 9. NAME TAG ──────────────────────────────────────────
             if (!isSomersault && !isRolling) {
                 ctx.save();
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.75)'; // Slate overlay
-                const nm = name.split(' ')[0]; // First name only
-                ctx.font = `bold ${10/S}px Outfit`;
+                const nm = name.split(' ')[0].toUpperCase();
+                ctx.font = `bold ${8/S}px 'Press Start 2P', monospace`;
                 ctx.textAlign = 'center';
                 const tw = ctx.measureText(nm).width;
-                ctx.fillRect(hcX - tw/2 - 3, -22, tw + 6, 13);
+                
+                // Solid high-contrast background shield (immune to laser overlays)
+                ctx.fillStyle = '#020617';
+                ctx.fillRect(hcX - tw/2 - 4, -25, tw + 8, 13);
+                
+                // Accent border based on character type
+                ctx.strokeStyle = (name === 'Abhishek' || name.includes('Abhishek')) ? '#38bdf8' : '#fbbf24';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(hcX - tw/2 - 4, -25, tw + 8, 13);
+                
+                // Clean white uppercase name text
                 ctx.fillStyle = '#ffffff';
-                ctx.shadowColor = '#60a5fa';
-                ctx.shadowBlur = 4;
-                ctx.fillText(nm, hcX, -12);
+                ctx.fillText(nm, hcX, -15);
                 ctx.restore();
             }
 
